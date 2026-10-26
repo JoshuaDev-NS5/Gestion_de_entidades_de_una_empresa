@@ -1,0 +1,18 @@
+:root{
+       --itam-verde: #0F6E56;
+       --itam-verde-claro: #E1F5EE;
+       --itam-verde-oscuro: #085041;
+}
+
+body { background: #f7f9f8; }
+.bg-itam { background-color: var(--itam-verde) !important; }
+.text-itam { color: var(--itam-verde) !important; }
+.navbar-brand { color: var(--itam-verde) !important; font-weight: 600; }
+.btn-itam { background: var(--itam-verde); border-color: var(--itam-verde); color: #fff; }
+.btn-itam:hover { background: var(--itam-verde-oscuro); border-color: var(--itam-verde-oscuro); color: #fff; }
+.list-group-item.active {
+    background: var(--itam-verde-claro);
+    color: var(--itam-verde-oscuro);
+    border-color: var(--bs-list-group-border-color);
+    font-weight: 500;
+}
