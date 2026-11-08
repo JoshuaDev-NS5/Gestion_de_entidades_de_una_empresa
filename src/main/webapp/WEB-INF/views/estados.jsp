@@ -13,7 +13,7 @@
             <jsp:param name="activo" value="estados"/>
         </jsp:include>
 
-        <main class="container  py-4" style="border:solid 1px red">
+        <main class="container  py-4" >
             <div class="d-flex align-items-center mb-3">
                 <h1 class="h3 mb-0">Estados de activo</h1>
                 <button type="button" class="btn btn-itam ms-auto" onclick="abrirNuevo()">

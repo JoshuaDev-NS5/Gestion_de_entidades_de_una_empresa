@@ -14,7 +14,7 @@ import org.proyecto.dao.EmpleadoDAO;
 import org.proyecto.dao.EstadoActivoDAO;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"","/inicio"})
+@WebServlet("/inicio")
 public class InicioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
