@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.proyecto.dao.UsuarioDAO;
+import org.proyecto.model.Usuario;
 
 import java.io.IOException;
 
@@ -16,15 +18,18 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void  doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    protected void  doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UsuarioDAO usuarioDAO=new UsuarioDAO();
+
         //Tomamos las variables que llegaran de la solicitud post
         String username=req.getParameter("username");
         String password=req.getParameter("password");
 
-        String usernameAdmin = "admin";
-        String passwordAdmin = "123";
 
-        if (username.equals(usernameAdmin) && password.equals(passwordAdmin)) {
+        Usuario usuario= usuarioDAO.getByUsername(username);
+
+
+        if ( usuario != null && usuario.getPassword().equalsIgnoreCase(password)) {
             //DAR ACCESO AL SISTEMA
             req.getSession().setAttribute("username", username);
             resp.sendRedirect(req.getContextPath() + "/inicio");//LLeva por Path porque la web necesita informacion de la ruta
