@@ -1,0 +1,59 @@
+    marca VARCHAR(50),
+    nro_serie VARCHAR(50) UNIQUE,
+    id_estado INTEGER,
+    id_empleado INTEGER,
+    CONSTRAINT fk_activo_empleado
+        FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
+    CONSTRAINT fk_activos_estado_act
+        FOREIGN KEY (id_estado) REFERENCES estados_activo(id_estado)
+);
+
+-- Datos de Empleados
+INSERT INTO empleados (id_empleado, nombre, area, sueldo, estado) VALUES
+(1, 'Marcos', 'RRCH', 45000.00, 'ACTIVO'),
+(2, 'Alice', 'RRCH', 45000.00, 'ACTIVO'),
+(4, 'Anthony', 'TI', 785555.00, 'ACTIVO'),
+(5, 'Josue', 'TI', 7845.00, 'ACTIVO'),
+(6, 'Desmon', 'TI', 789456.00, 'ACTIVO'),
+(7, 'Maria', 'TI', 85481.00, 'ACTIVO')
+ON CONFLICT (id_empleado) DO NOTHING;
+
+-- Datos de Estados_Activo
+INSERT INTO estados_activo (id_estado, nombre, descripcion) VALUES
+(1, 'En Almacén', 'El activo se encuentra operativo y en el almacén.'),
+(2, 'Asignado', 'El activo se encuentra asignado a un colaborador.'),
+(3, 'En Mantenimiento', 'El activo se encuentra en mantenimiento preventivo o correctivo.'),
+(4, 'Retirado', 'El activo ya cumplió con su ciclo de vida y se encuentra en el almacén.'),
+(5, 'De Baja', 'El activo ya no forma parte de la organización, no se encuentra en ninguna de sus instalaciones y no es más responsabilidad de la misma.'),
+(1089, 'prueba', 'dadad')
+ON CONFLICT (id_estado) DO NOTHING;
+
+-- Datos de Usuarios
+INSERT INTO usuarios (id_usuario, username, password, id_empleado, estado) VALUES
+(1, 'admin', '123456789', 1, 'activo')
+ON CONFLICT (id_usuario) DO NOTHING;
+
+-- Datos de Activos
+INSERT INTO activos (id_activo, nombre, marca, nro_serie, id_estado, id_empleado) VALUES
+(1, 'PC', 'Asus', '789456123', 3, NULL),
+(2, 'Moto Edge 50 Fusion', 'Motorola', 'S0001', 2, NULL),
+(5, 'MFusion', 'Motorola', 'S0003', 1, NULL),
+(7, 'MacPRO', 'Apple', 'S0005', 5, 1),
+(8, 'MacPRO', 'Apple', 'S0006', 1, 1),
+(12, 'MacM2', 'Aplee', 'S0085', 4, 2),
+(13, 'Tarjeta_de_rastreo', 'SENTINEL', '79845', 5, 1),
+(14, 'Telefono A21', 'Samsum', '1458795', 2, 5)
+ON CONFLICT (id_activo) DO NOTHING;
+
+-- Sincronizar las secuencias identity para que los próximos IDs continúen
+-- desde el máximo existente, en lugar de volver a 1.
+SELECT setval(pg_get_serial_sequence('empleados', 'id_empleado'), (SELECT MAX(id_empleado) FROM empleados));
+SELECT setval(pg_get_serial_sequence('estados_activo', 'id_estado'), (SELECT MAX(id_estado) FROM estados_activo));
+SELECT setval(pg_get_serial_sequence('usuarios', 'id_usuario'), (SELECT MAX(id_usuario) FROM usuarios));
+SELECT setval(pg_get_serial_sequence('activos', 'id_activo'), (SELECT MAX(id_activo) FROM activos));
+
+-- Verificación rápida: estas consultas deben devolver 6, 6, 1 y 8 filas.
+SELECT COUNT(*) AS total_empleados FROM empleados;
+SELECT COUNT(*) AS total_estados FROM estados_activo;
+SELECT COUNT(*) AS total_usuarios FROM usuarios;
+SELECT COUNT(*) AS total_activos FROM activos;

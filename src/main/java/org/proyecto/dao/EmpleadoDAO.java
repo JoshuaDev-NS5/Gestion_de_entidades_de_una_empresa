@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpleadoDAO {
-    public void insert(Empleado empleado) {
+    public boolean insert(Empleado empleado) {
         String sql = "INSERT INTO Empleados (nombre, area, sueldo, estado) VALUES (?, ?, ?, ?)";
 
         try (Connection con = Conexion.getConnection();
@@ -22,11 +22,12 @@ public class EmpleadoDAO {
             ps.setDouble(3, empleado.getSueldo());
             ps.setString(4, empleado.getEstado());
 
-            ps.executeUpdate();
-
+            int filasafectadas=ps.executeUpdate();
+            return filasafectadas>0;
         } catch (SQLException e) {
             System.err.println("Error al registrar el empleado.");
             System.err.println("Detalle: " + e.getMessage());
+            return false;
         }
     }
 
@@ -87,7 +88,7 @@ public class EmpleadoDAO {
         return empleado;
     }
 
-    public void update (Empleado  empleado) {
+    public boolean update (Empleado  empleado) {
         String sql = "UPDATE Empleados SET nombre = ?, area = ?, sueldo = ?, estado = ? WHERE id_empleado = ?";
 
         try (Connection con = Conexion.getConnection();
@@ -99,15 +100,17 @@ public class EmpleadoDAO {
             ps.setString(4, empleado.getEstado());
             ps.setInt(5, empleado.getIdEmpleado());
 
-            ps.executeUpdate();
+            int filasAfectadas=ps.executeUpdate();
+            return filasAfectadas>0;
 
         } catch (SQLException e) {
             System.err.println("Error al actualizar el empleado con ID: " + empleado.getIdEmpleado());
             System.err.println("Detalle: " + e.getMessage());
+            return false;
         }
     }
 
-    public void delete (int id) {
+    public boolean delete (int id) {
         String sql = "UPDATE Empleados SET estado = 'baja' WHERE id_empleado = ?";
 
         try (Connection con = Conexion.getConnection();
@@ -115,11 +118,13 @@ public class EmpleadoDAO {
 
             ps.setInt(1, id);
 
-            ps.executeUpdate();
+            int filasAfectadas=ps.executeUpdate();
+            return filasAfectadas>0;
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar el empleado con ID: " + id);
             System.err.println("Detalle: " + e.getMessage());
+            return false;
         }
     }
 }
